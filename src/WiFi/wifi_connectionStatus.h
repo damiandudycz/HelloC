@@ -1,7 +1,8 @@
 #ifndef WIFI_CONNECTIONSTATUS_H
 #define WIFI_CONNECTIONSTATUS_H
 
-enum wifi_connectionStatus {
+enum wifi_connectionStatus
+{
     NOT_INITIALIZED,
     DISCONNECTED,
     CONNECTED
