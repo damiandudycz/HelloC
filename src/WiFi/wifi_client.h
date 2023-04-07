@@ -20,7 +20,7 @@ struct wifi_manual_config
 enum wifi_result_t wifi_client_setup(struct wifi_client_t *client);
 enum wifi_result_t wifi_client_scan(const struct wifi_client_t *client, uint16_t max_results, wifi_ap_record_t *results, uint16_t *results_count);
 enum wifi_result_t wifi_client_restore_connection(struct wifi_client_t *client, bool *restored);
-enum wifi_result_t wifi_client_connect(struct wifi_client_t *client, const char *ssid, const uint8_t *bssid, const char *password, const struct wifi_manual_config *manual_config);
+enum wifi_result_t wifi_client_connect(struct wifi_client_t *client, const char *ssid, const char *password, const struct wifi_manual_config *manual_config);
 enum wifi_result_t wifi_client_wait_for_ip(struct wifi_client_t *client);
 enum wifi_result_t wifi_client_disconnect(struct wifi_client_t *client);
 

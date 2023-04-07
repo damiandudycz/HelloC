@@ -139,7 +139,7 @@ enum wifi_result_t wifi_client_connect_using_config(struct wifi_client_t *client
 
 }
 
-enum wifi_result_t wifi_client_connect(struct wifi_client_t *client, const char *ssid, const uint8_t *bssid, const char *password, const struct wifi_manual_config *manual_config) 
+enum wifi_result_t wifi_client_connect(struct wifi_client_t *client, const char *ssid, const char *password, const struct wifi_manual_config *manual_config) 
 {
     if (!client) { return WIFI_REQUIRED_PARAMETER_IS_NULL; }
     if (!ssid) { return WIFI_REQUIRED_PARAMETER_IS_NULL; }
@@ -149,10 +149,6 @@ enum wifi_result_t wifi_client_connect(struct wifi_client_t *client, const char 
     strncpy((char *)wifi_config.sta.ssid, ssid, sizeof(wifi_config.sta.ssid) - 1);
     if (password) {
         strncpy((char *)wifi_config.sta.password, password, sizeof(wifi_config.sta.password) - 1);
-    }
-    if (bssid) {
-        wifi_config.sta.bssid_set = true;
-        memcpy(wifi_config.sta.bssid, &bssid, 6);
     }
 
     if (manual_config) {
@@ -193,8 +189,7 @@ enum wifi_result_t wifi_client_restore_connection(struct wifi_client_t *client, 
     if (client->status != DISCONNECTED) { return WIFI_WRONG_CLIENT_STATUS; }
 
     wifi_config_t wifi_config;
-    const uint8_t empty_bssid[WIFI_BSSID_LENGTH] = {0};
-    if (esp_wifi_get_config(WIFI_IF_STA, &wifi_config) == ESP_OK && (strlen((char *)wifi_config.sta.ssid) || memcmp(&wifi_config.sta.bssid, &empty_bssid, sizeof(empty_bssid)))) {
+    if (esp_wifi_get_config(WIFI_IF_STA, &wifi_config) == ESP_OK && (wifi_config.sta.ssid || wifi_config.sta.bssid)) {
         wifi_client_connect_using_config(client, &wifi_config);
         *restored = true;
     }
