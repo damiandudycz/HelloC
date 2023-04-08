@@ -23,6 +23,13 @@ enum wifi_result_t wifi_client_setup(struct wifi_client_t *client)
     if (client->status != NOT_INITIALIZED) { return WIFI_WRONG_CLIENT_STATUS; }
 
     client->status = DISCONNECTED;
+
+    if (client->config.setup_nvs) {
+        nvs_initialize();
+    }
+    if (!client->config.enable_logs) {
+        wifi_disable_logs();
+    }
     
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
 

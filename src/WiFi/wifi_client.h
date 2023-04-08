@@ -5,10 +5,23 @@
 #include "wifi_helpers.h"
 #include <esp_wifi.h>
 
+struct wifi_client_config_t
+{
+    bool setup_nvs;
+    bool enable_logs;
+};
+
 struct wifi_client_t 
 {
+    struct wifi_client_config_t config;
     enum wifi_connectionStatus status;
     esp_netif_t *sta_interface;
+};
+
+#define WIFI_CLIENT(config_value) { \
+    .config = config_value,         \
+    .status = NOT_INITIALIZED,      \
+    .sta_interface = NULL           \
 };
 
 struct wifi_manual_config 

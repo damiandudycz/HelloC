@@ -2,8 +2,8 @@
 #include "WiFi/wifi_client.h"
 #include "WiFi/wifi_helpers.h"
 
-#define WIFI_SSID "Home 835B"
-#define WIFI_PASSWORD "wzdtrmaso4"
+#define WIFI_SSID "WiFI Name"
+#define WIFI_PASSWORD "Hello World"
 #define WIFI_IP "192.168.86.1"
 #define WIFI_GATEWAY "192.168.86.170"
 #define WIFI_NETMASK "255.255.255.0"
@@ -17,11 +17,13 @@ void app_main()
     // Platform assertions.
     static_assert (sizeof(uint8_t) == sizeof(unsigned char), "Char isn't 8-bit, aborting");
 
-    struct wifi_client_t wifi_client = {0};
+    struct wifi_client_config_t wifi_config = {
+        .setup_nvs = true,
+        .enable_logs = true
+    };
+    struct wifi_client_t wifi_client = WIFI_CLIENT(wifi_config);
 
     // Initialize main devices and settings related to WiFi.
-    nvs_initialize();
-    wifi_disable_logs();
     wifi_client_setup(&wifi_client);
     
     bool connection_restored = false;
