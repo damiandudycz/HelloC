@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "ip6_addr.h": "c"
+        "ip6_addr.h": "c",
+        "esp_wifi.h": "c"
     }
 }

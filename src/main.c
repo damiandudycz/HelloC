@@ -34,20 +34,28 @@ void app_main()
     if (!connection_restored) {
         printf("+-- Connecting with default WiFi network.\n");
 
-        struct wifi_manual_config *manual_config = NULL;
+        struct wifi_network_config *network_config = NULL;
+        struct wifi_network_config nconfig = {
+            .ssid = { WIFI_SSID },
+            .password = { WIFI_PASSWORD }
+        };
+        network_config = &nconfig;
+
+        struct wifi_address_config *manual_config = NULL;
         if (WIFI_USE_MANUAL_CONFIG) {
             const esp_netif_ip_info_t ipv4Config = {
                 .ip = WIFI_GET_IPV4_ADDR(WIFI_IP),
                 .netmask = WIFI_GET_IPV4_ADDR(WIFI_NETMASK),
                 .gw = WIFI_GET_IPV4_ADDR(WIFI_GATEWAY)
             };
-            struct wifi_manual_config config = {
+            struct wifi_address_config config = {
                 .ipv4 = &ipv4Config,
                 .ipv6 = NULL
             };
             manual_config = &config;
         }
-        wifi_client_connect(&wifi_client, WIFI_SSID, WIFI_PASSWORD, manual_config);
+        
+        wifi_client_connect(&wifi_client, network_config, manual_config);
     }
 
     wifi_client_wait_for_ip(&wifi_client);

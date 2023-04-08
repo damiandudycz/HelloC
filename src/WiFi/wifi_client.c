@@ -146,16 +146,18 @@ enum wifi_result_t wifi_client_connect_using_config(struct wifi_client_t *client
 
 }
 
-enum wifi_result_t wifi_client_connect(struct wifi_client_t *client, const char *ssid, const char *password, const struct wifi_manual_config *manual_config) 
+enum wifi_result_t wifi_client_connect(struct wifi_client_t *client, const struct wifi_network_config *network_config, const struct wifi_address_config *manual_config)
 {
     if (!client) { return WIFI_REQUIRED_PARAMETER_IS_NULL; }
-    if (!ssid) { return WIFI_REQUIRED_PARAMETER_IS_NULL; }
+    if (!network_config) { return WIFI_REQUIRED_PARAMETER_IS_NULL; }
     if (client->status != DISCONNECTED) { return WIFI_WRONG_CLIENT_STATUS; }
 
     wifi_config_t wifi_config = {0};
-    strncpy((char *)wifi_config.sta.ssid, ssid, sizeof(wifi_config.sta.ssid) - 1);
-    if (password) {
-        strncpy((char *)wifi_config.sta.password, password, sizeof(wifi_config.sta.password) - 1);
+    if (network_config->ssid) {
+        strncpy((char *)wifi_config.sta.ssid, network_config->ssid, sizeof(wifi_config.sta.ssid) - 1);
+    }
+    if (network_config->password) {
+        strncpy((char *)wifi_config.sta.password, network_config->password, sizeof(wifi_config.sta.password) - 1);
     }
 
     if (manual_config) {
@@ -170,6 +172,8 @@ enum wifi_result_t wifi_client_connect(struct wifi_client_t *client, const char 
     else {
         if (esp_netif_dhcpc_start(client->sta_interface) != ESP_OK) { return WIFI_ESP_ERROR; }
     }
+
+    // wifi_config_t config = { .sta = &network_config };
 
     return wifi_client_connect_using_config(client, &wifi_config);
 }
